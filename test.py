@@ -2,7 +2,6 @@ import pandas as pd
 from esm import FastaBatchedDataset, pretrained
 import pathlib
 import torch
-from esm import FastaBatchedDataset, pretrained
 
 def csv_fasta(file_path):
     df = pd.read_csv(file_path)
@@ -37,8 +36,8 @@ def ESM_extract_embeddings(model_name, model_layers, fasta_file, tokens_per_batc
     
     with torch.no_grad():
         for batch_idx, (labels, strs, toks) in enumerate(data_loader):
-
-            print(f'Processing batch {batch_idx + 1} of {len(batches)}')
+            with open("LOG.txt", "w") as file:
+                file.write(f'Processing batch {batch_idx + 1} of {len(batches)}\n')
 
             if torch.cuda.is_available():
                 toks = toks.to(device="cuda", non_blocking=True)
@@ -64,14 +63,17 @@ def ESM_extract_embeddings(model_name, model_layers, fasta_file, tokens_per_batc
 
 
 
-models = {
-    "esm2_t6_8M_UR50D" : 6,
-    "esm2_t12_35M_UR50D" : 12,
-    "esm2_t30_150M_UR50D" : 30,
-    "esm2_t33_650M_UR50D" : 33,
-    "esm2_t36_3B_UR50D" : 36,
-    "esm2_t48_15B_UR50D": 48,
-}
+# models = {
+#     "esm2_t6_8M_UR50D" : 6,
+#     "esm2_t12_35M_UR50D" : 12,
+#     "esm2_t30_150M_UR50D" : 30,
+#     "esm2_t33_650M_UR50D" : 33,
+#     "esm2_t36_3B_UR50D" : 36,
+#     "esm2_t48_15B_UR50D": 48,
+# }
 
-for model in models:
-    ESM_extract_embeddings(model, models[model], "Base.fasta")
+# for model in models:
+#     ESM_extract_embeddings(model, models[model], "Base.fasta")
+
+
+ESM_extract_embeddings("esm2_t33_650M_UR50D", 33, "Base.fasta")
