@@ -15,4 +15,4 @@
 #SBATCH --mail-type=FAIL
 
 
-# LOAD MODULES, INSERT CODE, AND RUN YOUR PROGRAMS HERE
+python test.py
