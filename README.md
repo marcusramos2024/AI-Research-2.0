@@ -1,1 +1,3 @@
-# AI-Research-2.0
+### Python Env:
+- source env/bin/activate
+- deactivate
