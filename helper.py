@@ -77,4 +77,4 @@ def ESM_extract_embeddings(model_name, fasta_file, start_index=1, end_index=5473
 
                 torch.save(result, filename)
 
-ESM_extract_embeddings("esm2_t6_8M_UR50D", "Base.fasta", start_index=5, end_index=10)
+ESM_extract_embeddings("esm2_t48_15B_UR50D", "Base.fasta", start_index=1, end_index=100)
