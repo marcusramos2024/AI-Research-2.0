@@ -54,9 +54,9 @@ def train_model(model_name):
 
         for p in train_proteins:
             x = read_embedding(embeddings_directory, p.id + ".pt", layer)
-            # x = np.append(x, p.growthTemp) 
-            # x = np.append(x, p.lysate)
-            # x = np.append(x, p.cell)
+            x = np.append(x, p.growthTemp) 
+            x = np.append(x, p.lysate)
+            x = np.append(x, p.cell)
             y = p.labelTemp
             xs_train.append(x)
             ys_train.append(y)
@@ -97,10 +97,9 @@ def test_models(model_name, version):
 
         for p in test_proteins:
             x = read_embedding(embeddings_directory, p.id + ".pt", layer)
-            # if version > 1:
-            #     x = np.append(x, p.growthTemp) 
-            #     x = np.append(x, p.lysate)
-            #     x = np.append(x, p.cell)
+            x = np.append(x, p.growthTemp) 
+            x = np.append(x, p.lysate)
+            x = np.append(x, p.cell)
             y = p.labelTemp
             xs_test.append(x)
             ys_test.append(y)
@@ -163,5 +162,4 @@ def test_models(model_name, version):
     df.to_csv(f'Results/{model_name}/{version}/Layers.csv', index=False)
 
 
-# train_model("esm2_t33_650M_UR50D")
-test_models("esm2_t33_650M_UR50D", 2.0)
+train_model("esm2_t33_650M_UR50D")
