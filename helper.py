@@ -9,8 +9,7 @@ def csv_fasta(file_path):
         for index, row in df.iterrows():
             file.write(">" + row["Protein"] + "\n" + row["sequence"] + "\n")
 
-def ESM_extract_embeddings(model_name, fasta_file, start_index=1, end_index=1, tokens_per_batch=4096, seq_length=1022):
-    
+def ESM_extract_embeddings(model_name, fasta_file, start_index=1, end_index=5473, tokens_per_batch=4096, seq_length=1022):
     models = {
         "esm2_t6_8M_UR50D" : 6,
         "esm2_t12_35M_UR50D" : 12,
@@ -41,14 +40,21 @@ def ESM_extract_embeddings(model_name, fasta_file, start_index=1, end_index=1, t
         batch_sampler=batches
     )
 
-    output_dir = pathlib.Path(model_name)
+    output_dir = pathlib.Path("Models/" + model_name)
     output_dir.mkdir(parents=True, exist_ok=True)
     
     with torch.no_grad():
         for batch_idx, (labels, strs, toks) in enumerate(data_loader):
-            with open("LOG.txt", "w") as file:
+            if batch_idx + 1 < start_index:
+                continue
+            if batch_idx + 1 > end_index:
+                break
+        
+            with open(f"Logs/{model_name}-{start_index}-{end_index}.txt", "a") as file:
                 file.write(f'Processing batch {batch_idx + 1} of {len(batches)}\n')
 
+            print(f'Processing batch {batch_idx + 1} of {len(batches)}')
+            
             if torch.cuda.is_available():
                 toks = toks.to(device="cuda", non_blocking=True)
 
@@ -71,4 +77,4 @@ def ESM_extract_embeddings(model_name, fasta_file, start_index=1, end_index=1, t
 
                 torch.save(result, filename)
 
-ESM_extract_embeddings("esm2_t6_8M_UR50D", "Base.fasta")
+ESM_extract_embeddings("esm2_t6_8M_UR50D", "Base.fasta", start_index=5, end_index=10)
